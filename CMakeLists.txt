@@ -9,7 +9,7 @@ project (InMemoryDb)
 ListHeaderFiles(FALSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 ListSourceFiles(FALSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
+add_executable( ${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
