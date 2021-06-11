@@ -15,30 +15,24 @@
 
 #include "DbTablesStructs.hpp"
 
-#include <vector>
-
 namespace xq
 {
-	/// Definitions for the Records Collections
-	typedef std::vector<DbTableTest> DbRecordCollection;
-	typedef std::vector<const DbTableTest*> DbRecordPointersCollection;
-
 	/// @class InMemoryDb
-	/// @brief In-memory database class
+	/// @brief In-memory database class.
 	/// @details Provides implementation of a database which is hosted
 	/// directly in the memory with expected database operations like
 	/// Find Matching Records, Add Records and Delete Records. 
 	class InMemoryDb
 	{
 	public:
-		/// @brief Class constructor with arguments
-		/// @details Constructs the class using the given arguments 
-		InMemoryDb(const DbRecordCollection& f_records);
+		/// @brief Class constructor with arguments.
+		/// @details Constructs the class using the given arguments.
+		InMemoryDb(const DbTestRecordCollection& f_records);
 		void findMatchingRecords(const std::string& f_columnName, 
-			const std::string& f_matchString, DbRecordPointersCollection& f_output);
+			const std::string& f_matchString, DbTestRecordPointersCollection& f_output);
 
 	private:
-		DbRecordCollection m_records; ///< Collection with all the users records.
+		DbTestRecordCollection m_records; ///< Collection with all the users records.
 	};
 }
 #endif // !IN_MEMORY_DB_HPP

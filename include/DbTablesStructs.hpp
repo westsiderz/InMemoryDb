@@ -12,15 +12,24 @@
 #define DB_TABLES_STRUCTS_HPP
 
 #include <string>
-
-/// @struct DbTableTest
-/// @brief 
-struct DbTableTest
+#include <vector>
+namespace xq
 {
-    std::string name; ///< Name of the user
-    std::string surname; ///< Surname of the user
-    long balance; ///< Balance of the user
-    uint32_t id; ///< Unique id column   
-};
+    struct DbTableTest;
 
+    /// Definitions for the Records Collections
+    typedef std::vector<DbTableTest> DbTestRecordCollection;
+    typedef std::vector<const DbTableTest*> DbTestRecordPointersCollection;
+
+    /// @struct DbTableTest
+    /// @brief Table records for users.
+    /// @brief Provides table record structure for recording user data.
+    struct DbTableTest
+    {
+        std::string name; ///< Name of the user.
+        std::string surname; ///< Surname of the user.
+        int64_t balance; ///< Balance of the user.
+        uint32_t id; ///< Unique id column.   
+    };
+}
 #endif // !DB_TABLES_STRUCTS_HPP

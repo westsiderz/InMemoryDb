@@ -17,16 +17,16 @@
 
 namespace xq
 {
-	InMemoryDb::InMemoryDb(const DbRecordCollection& f_records)
+	InMemoryDb::InMemoryDb(const DbTestRecordCollection& f_records)
 		:
 		m_records{ f_records }
 	{
 	}
 
 	void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
-		const std::string& f_matchString, DbRecordPointersCollection& f_output)
+		const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
 	{
-        DbRecordCollection result{};
+        DbTestRecordCollection result{};
         if (f_columnName == "column0")
         {
             uint32_t matchValue = std::stoul(f_matchString);
@@ -34,7 +34,7 @@ namespace xq
                 return matchValue == rec.id;
                 });
         }
-        else if (f_columnName == "colum1")
+        else if (f_columnName == "column1")
         {
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (rec.name.find(f_matchString) != std::string::npos)
@@ -45,7 +45,7 @@ namespace xq
         }
         else if (f_columnName == "column2")
         {
-            long matchValue = std::stol(f_matchString);
+            int64_t matchValue = std::stol(f_matchString);
 
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (matchValue == rec.balance)

@@ -19,8 +19,11 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 
 # Add compiler options for Visual Studio
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE 	/Wall
-													/WX)
+    target_compile_options(${PROJECT_NAME} PRIVATE 	/std:c++17
+													/Wall
+													/WX
+													/wd4820
+													/wd5045)
 	
 	target_compile_definitions(${PROJECT_NAME} PRIVATE
 													__STDC_WANT_SECURE_LIB__)
@@ -32,3 +35,4 @@ else()
 													-Werror)
 
 endif()
+
