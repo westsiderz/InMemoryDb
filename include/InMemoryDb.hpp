@@ -13,7 +13,7 @@
 #ifndef IN_MEMORY_DB_HPP
 #define IN_MEMORY_DB_HPP
 
-#include "DbTablesStructs.hpp"
+#include "DbTableTest.hpp"
 
 namespace xq
 {
@@ -34,5 +34,5 @@ namespace xq
 	private:
 		DbTestRecordCollection m_records; ///< Collection with all the users records.
 	};
-}
-#endif // !IN_MEMORY_DB_HPP
+} /// namespace xq
+#endif /// !IN_MEMORY_DB_HPP

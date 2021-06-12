@@ -16,7 +16,7 @@ namespace xq
 {
 	void TimeMeasurement::startTimer()
 	{
-		/// The timer can be started only if it hasn't been already
+		/// The timer can be started only if it hasn't been started already
 		if (m_timerStatus != TimerStatus::Started)
 		{
 			m_startTime = std::chrono::steady_clock::now();
@@ -74,4 +74,4 @@ namespace xq
 			std::cout << "The timer was not started and stopped properly\n";
 		}
 	}
-}
+} /// namespace xq

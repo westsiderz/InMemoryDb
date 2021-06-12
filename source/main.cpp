@@ -1,15 +1,35 @@
 #include "PerformanceTester.hpp"
 
+#include <iostream>
+
 /// Settings for the performance tests
-constexpr uint64_t const cNumberOfTestRecords{ 1000000 };
-constexpr uint32_t const cNumberOfTestExecutions{ 10 };
+constexpr uint64_t const cNumberOfTestRecordsSameAmount{ 1000000 };
+constexpr uint32_t const cNumberOfTestRecordsDifferentAmountPower{ 10 };
+constexpr uint32_t const cNumberOfTestExecutionsSameAmount{ 10 };
+constexpr uint32_t const cNumberOfTestExecutionsdifferentAmount{ 6 };
 
 int main()
 {
 	xq::PerformanceTester tester{};
-	for (int i = 0; i < cNumberOfTestExecutions; ++i)
+	/// Test with same amount of records several times
+	std::cout << "Testing Find Matching Records with the same anount of records\n";
+	for (int i = 0; i < cNumberOfTestExecutionsSameAmount; ++i)
 	{
-		tester.measureFindMatchingRecordsPerformance(cNumberOfTestExecutions, cNumberOfTestRecords);
+		std::cout << "Starting test #" << i + 1 << " with " << cNumberOfTestRecordsSameAmount << " records\n";
+		tester.measureFindMatchingRecordsPerformanceSeveralRecords(cNumberOfTestRecordsSameAmount);
+		std::cout << "\n";
 	}
+	std::cout << "\n";
+
+	/// Test with different amounts of records several times
+	std::cout << "Testing Find Matching Records with different anounts of records\n";
+	for (int i = 0; i < cNumberOfTestExecutionsdifferentAmount; ++i)
+	{
+		auto executionTimes = static_cast<uint64_t>(pow(static_cast<double>(cNumberOfTestRecordsDifferentAmountPower), static_cast<double>(i + 2)));
+		std::cout << "Starting test #" << i + 1 << " with " << executionTimes << " records\n";
+		tester.measureFindMatchingRecordsPerformanceSeveralRecords(executionTimes);
+		std::cout << "\n";
+	}
+	std::cout << "\n";
 	return 0;
 }

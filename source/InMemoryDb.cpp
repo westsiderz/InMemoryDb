@@ -26,13 +26,19 @@ namespace xq
 	void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
 		const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
 	{
-        DbTestRecordCollection result{};
+        /// This will decrease the execution time by several milliseconds 
+        /// but the used memory might be increased unnecessarely.
+        /// f_output.reserve(m_records.size());
+        
         if (f_columnName == "column0")
         {
             uint32_t matchValue = std::stoul(f_matchString);
-            std::copy_if(m_records.begin(), m_records.end(), std::back_inserter(result), [&](const DbTableTest& rec) {
-                return matchValue == rec.id;
-                });
+            std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+                if (matchValue == rec.id)
+                {
+                    f_output.emplace_back(&rec);
+                }
+            });
         }
         else if (f_columnName == "column1")
         {
@@ -41,24 +47,26 @@ namespace xq
                 {
                     f_output.emplace_back(&rec);
                 }
-                });
+            });
         }
         else if (f_columnName == "column2")
         {
             int64_t matchValue = std::stol(f_matchString);
-
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (matchValue == rec.balance)
                 {
                     f_output.emplace_back(&rec);
                 }
-                });
+            });
         }
         else if (f_columnName == "column3")
         {
-            std::copy_if(m_records.begin(), m_records.end(), std::back_inserter(result), [&](const DbTableTest& rec) {
-                return rec.surname.find(f_matchString) != std::string::npos;
-                });
+            std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+                if (rec.address.find(f_matchString) != std::string::npos)
+                {
+                    f_output.emplace_back(&rec);
+                }
+            });
         }
 	}
-}
+} /// namespace xq

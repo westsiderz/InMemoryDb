@@ -11,7 +11,7 @@
 #ifndef PERFORMANCE_TESTER_HPP
 #define PERFORMANCE_TESTER_HPP
 
-#include "DbTablesStructs.hpp"
+#include "DbTableTest.hpp"
 
 namespace xq
 {
@@ -22,18 +22,25 @@ namespace xq
 	{
 	public:
 		/// @brief Measure the performance of the Find Matching Records operation.
-		/// @ Measures the time to search for a matching records in the database. 
+		/// @details Measures the time to search for a matching records in the database.
+		/// Only one record is available, matching the criteria. 
 		/// Makes comparison against the original algorithm.
-		/// @param[in] f_numberOfExecutions The number of times the test is executed.
 		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
-		void measureFindMatchingRecordsPerformance(uint32_t f_numberOfExecutions, uint64_t f_numberOfRecords);
+		void measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords);
+
+		/// @brief Measure the performance of the Find Matching Records operation.
+		/// @details Measures the time to search for a matching records in the database.
+		/// Several records are available, matching the criteria. 
+		/// Makes comparison against the original algorithm.
+		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
+		void measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords);
 
 	private:
 		/// @brief Generates test data.
 		/// @details Generates test data to be used for testing the algorithms and store it in a collection.
 		/// @param[in] f_prefixSuffix The string to be used to populate the string members of the test data. 
 		/// @param[in] f_numberOfRecords The number of records to be generated.
-		/// @returns></returns>
+		/// @returns Collection of user records.
 		DbTestRecordCollection generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords);
 
 		/// @brief The original algorithm from Quickbase.
@@ -41,9 +48,9 @@ namespace xq
 		/// @param[in] f_records The records to search in.
 		/// @param[in] f_columnName The column to search in. 
 		/// @param[in] f_matchString The string to search for.
-		/// @returns COllection with all the matching records.
+		/// @returns Collection with all the matching records.
 		DbTestRecordCollection QBFindMatchingRecords(const DbTestRecordCollection& f_records, 
 			const std::string& f_columnName, const std::string& f_matchString);
 	};
-}
+} /// namespace xq
 #endif // !PERFORMANCE_TESTER_HPP

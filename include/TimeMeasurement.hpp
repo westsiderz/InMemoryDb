@@ -64,6 +64,6 @@ namespace xq
 		std::chrono::steady_clock::time_point m_endTime{}; ///< The time point when the timer was stopped.
 		TimerStatus m_timerStatus{ TimerStatus::NotStarted }; ///< The current state of the timer
 	};
-}
+} /// namespace xq
 #endif // !TIME_MEASUREMENT_HPP
 

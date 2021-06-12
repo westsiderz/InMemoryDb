@@ -16,47 +16,75 @@
 #include <assert.h>
 #include <iostream>
 #include <iterator>
-#include <string>
 
 using namespace std::chrono;
 
 namespace xq
 {
-    void PerformanceTester::measureFindMatchingRecordsPerformance(uint32_t f_numberOfExecutions, uint64_t f_numberOfRecords)
+    void PerformanceTester::measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords)
     {
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
 
-        /// Run the test several times
-        for (uint32_t i = 0; i < f_numberOfExecutions; ++i)
-        {
-            std::cout << "Test #" << i << "\n";
-            TimeMeasurement timer{};
-            timer.startTimer();
-            auto filteredSet = QBFindMatchingRecords(testData, "column1", "testdata");
-            auto filteredSet2 = QBFindMatchingRecords(testData, "column2", "24000");
-            timer.stopTimer();
-            timer.printTimeInMilliseconds("QBFindMatchingRecords");
-            timer.printTimeInSeconds("QBFindMatchingRecords");
-            timer.resetTimer();
+        /// Set the search string to be unique
+        auto searchString = "testdata" + std::to_string(f_numberOfRecords / 2);
 
-            InMemoryDb database{ testData };
-            DbTestRecordPointersCollection resultCollection{};
-            timer.startTimer();
-            database.findMatchingRecords("column1", "testdata", resultCollection);
-            database.findMatchingRecords("column2", "24000", resultCollection);
-            timer.stopTimer();
-            timer.printTimeInMilliseconds("AKFindMatchingRecords");
-            timer.printTimeInSeconds("AKFindMatchingRecords");
-            timer.resetTimer();
+        /// Test the original algorithm from Quickbase
+        TimeMeasurement timer{};
+        timer.startTimer();
+        auto filteredSet = QBFindMatchingRecords(testData, "column1", searchString);
+        auto filteredSet2 = QBFindMatchingRecords(testData, "column2", "24000");
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("QBFindMatchingRecords");
+        timer.printTimeInSeconds("QBFindMatchingRecords");
+        timer.resetTimer();
 
-            // make sure that the function is correct
-            assert(filteredSet.size() >= 1);
-            assert(resultCollection.size() >= 1);
-            assert(filteredSet.size() == resultCollection.size());
+        /// Test my improved algorithm
+        InMemoryDb database{ testData };
+        DbTestRecordPointersCollection resultCollection{};
+        timer.startTimer();
+        database.findMatchingRecords("column1", searchString, resultCollection);
+        database.findMatchingRecords("column2", "24000", resultCollection);
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("AKFindMatchingRecords");
+        timer.printTimeInSeconds("AKFindMatchingRecords");
+        timer.resetTimer();
 
-            std::cout << "\n";
-        }
+        /// Make sure that the function is correct
+        assert(filteredSet.size() == 1);
+        assert(resultCollection.size() == 1);
+    }
+
+    void PerformanceTester::measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords)
+    {
+        auto testData = generateTestData("testdata", f_numberOfRecords);
+        std::cout << "Test data generated\n";
+
+        /// Test the original algorithm from Quickbase
+        TimeMeasurement timer{};
+        timer.startTimer();
+        auto filteredSet = QBFindMatchingRecords(testData, "column1", "testdata");
+        auto filteredSet2 = QBFindMatchingRecords(testData, "column2", "24000");
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("QBFindMatchingRecords");
+        timer.printTimeInSeconds("QBFindMatchingRecords");
+        timer.resetTimer();
+
+        /// Test my improved algorithm
+        InMemoryDb database{ testData };
+        DbTestRecordPointersCollection resultCollection{};
+        timer.startTimer();
+        database.findMatchingRecords("column1", "testdata", resultCollection);
+        database.findMatchingRecords("column2", "24000", resultCollection);
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("AKFindMatchingRecords");
+        timer.printTimeInSeconds("AKFindMatchingRecords");
+        timer.resetTimer();
+
+        /// Make sure that the function is correct
+        assert(filteredSet.size() >= 1);
+        assert(resultCollection.size() >= 1);
+        assert(filteredSet.size() == resultCollection.size());
     }
 
     DbTestRecordCollection PerformanceTester::generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords)
@@ -65,7 +93,7 @@ namespace xq
         data.reserve(f_numberOfRecords);
         for (uint64_t i = 0; i < f_numberOfRecords; ++i)
         {
-            DbTableTest rec = {f_prefixSuffix + std::to_string(i), std::to_string(i) + f_prefixSuffix, static_cast<long>(i % 100),  static_cast<uint32_t>(i)};
+            DbTableTest rec{ static_cast<uint32_t>(i), f_prefixSuffix + std::to_string(i), static_cast<long>(i % 100), std::to_string(i) + f_prefixSuffix};
             data.emplace_back(rec);
         }
         return data;
@@ -85,7 +113,7 @@ namespace xq
                 long matchValue = std::stol(f_matchString);
                 return matchValue == rec.balance;
             }else if (f_columnName == "column3") {
-                return rec.surname.find(f_matchString) != std::string::npos;
+                return rec.address.find(f_matchString) != std::string::npos;
             }
             else {
                 return false;
@@ -93,4 +121,4 @@ namespace xq
             });
         return result;
     }
-}
+} /// namespace xq
