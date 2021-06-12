@@ -26,14 +26,20 @@ namespace xq
 		/// Only one record is available, matching the criteria. 
 		/// Makes comparison against the original algorithm.
 		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
-		void measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords);
+		void measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords) const;
 
 		/// @brief Measure the performance of the Find Matching Records operation.
 		/// @details Measures the time to search for a matching records in the database.
 		/// Several records are available, matching the criteria. 
 		/// Makes comparison against the original algorithm.
 		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
-		void measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords);
+		void measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords) const;
+
+		/// @brief Measure the performance of the Remove Record By Id operation.
+		/// @details Measures the time to search for a record with the given ID in the database and delete it.
+		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
+		/// @param[in] f_id The ID of the record to be deleted. 
+		void measureRemoveRecordByIdPerformance(uint64_t f_numberOfRecords, uint32_t f_id) const;
 
 	private:
 		/// @brief Generates test data.
@@ -41,7 +47,7 @@ namespace xq
 		/// @param[in] f_prefixSuffix The string to be used to populate the string members of the test data. 
 		/// @param[in] f_numberOfRecords The number of records to be generated.
 		/// @returns Collection of user records.
-		DbTestRecordCollection generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords);
+		DbTestRecordCollection generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords) const;
 
 		/// @brief The original algorithm from Quickbase.
 		/// @details This is the original algorithm for matching records search from Quickbase.
@@ -50,7 +56,7 @@ namespace xq
 		/// @param[in] f_matchString The string to search for.
 		/// @returns Collection with all the matching records.
 		DbTestRecordCollection QBFindMatchingRecords(const DbTestRecordCollection& f_records, 
-			const std::string& f_columnName, const std::string& f_matchString);
+			const std::string& f_columnName, const std::string& f_matchString) const;
 	};
 } /// namespace xq
 #endif // !PERFORMANCE_TESTER_HPP

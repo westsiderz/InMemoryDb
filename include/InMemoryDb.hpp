@@ -39,7 +39,7 @@ namespace xq
 		/// @param[in] f_matchString The string to search for.
 		/// @param[out] f_output Contains the records which match the search criteria.
 		void findMatchingRecordsOptimized(const std::string& f_columnName,
-			const std::string& f_matchString, DbTestRecordPointersCollection& f_output);
+			const std::string& f_matchString, DbTestRecordPointersCollection& f_output) const;
 
 		/// @brief Searches a set of records for a given string in a given column.
 		/// @details This is an updated version of the original algorithm from Quickbase. It stores the provided data 
@@ -50,7 +50,21 @@ namespace xq
 		/// @param[in] f_matchString The string to search for.
 		/// @param[out] f_output Contains the records which match the search criteria.
 		void findMatchingRecords(const std::string& f_columnName, 
-			const std::string& f_matchString, DbTestRecordPointersCollection& f_output);
+			const std::string& f_matchString, DbTestRecordPointersCollection& f_output) const;
+
+		/// @brief Delete a record from the database with the given id.
+		/// @details TBD
+		/// @param[in] f_id The id of the record to be deleted.
+		void deleteRecordByID(uint32_t f_id);
+
+		/// @brief Gets the number of deleted records
+		/// @details Goes through all records and find any with ID=0 which is considered deleted.
+		/// @returns Number of deleted records.
+		uint64_t getNumberOfDeletedRecords() const;
+
+		/// @brief Get the number of records in the database.
+		/// @returns The number of available records.
+		uint64_t getNumberOfRecords() const;
 
 	private:
 		DbTestRecordCollection m_records; ///< Collection with all the users records.

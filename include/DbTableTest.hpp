@@ -59,28 +59,28 @@ namespace xq
         /// from the Test table.
         /// @param[in] f_record The table record to check for matching strings.
         /// @returns True if a field from the record matches the given string, false elsewhen. 
-        inline bool checkMatching(const DbTableTest& f_record);
+        inline bool checkMatching(const DbTableTest& f_record) const;
         
     private:
         /// @brief Match the provided string against the ID column.
         /// @param[in] f_record The table record to check for matching strings.
         /// @returns True if the provided string matches the ID, false elsewhen.
-        inline bool matchId(const DbTableTest& f_record);
+        inline bool matchId(const DbTableTest& f_record) const;
 
         /// @brief Match the provided string against the Name column.
         /// @param[in] f_record The table record to check for matching strings.
         /// @returns True if the provided string matches the Name, false elsewhen.
-        inline bool matchName(const DbTableTest& f_record);
+        inline bool matchName(const DbTableTest& f_record) const;
 
         /// @brief Match the provided string against the Balance column.
         /// @param[in] f_record The table record to check for matching strings.
         /// @returns True if the provided string matches the balance, false elsewhen.
-        inline bool matchBalance(const DbTableTest& f_record);
+        inline bool matchBalance(const DbTableTest& f_record) const;
 
         /// @brief Match the provided string against the Address column.
         /// @param[in] f_record The table record to check for matching strings.
         /// @returns True if the provided string matches the Address, false elsewhen.
-        inline bool matchAddress(const DbTableTest& f_record);
+        inline bool matchAddress(const DbTableTest& f_record) const;
 
         std::function<bool(const DbTableTest&)> m_functionToExecute; ///< Pointer to a function to be executed for the current search.
         std::string m_stringToMatch; ///< The string value to match against any column of type string.

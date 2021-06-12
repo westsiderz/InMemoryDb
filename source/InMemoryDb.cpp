@@ -24,7 +24,7 @@ namespace xq
 	}
 
 	void InMemoryDb::findMatchingRecordsOptimized(const std::string& f_columnName,
-		const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
+		const std::string& f_matchString, DbTestRecordPointersCollection& f_output) const
 	{
         /// This will decrease the execution time by several milliseconds 
         /// but the used memory might be increased unnecessarely.
@@ -71,7 +71,7 @@ namespace xq
 	}
 
     void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
-        const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
+        const std::string& f_matchString, DbTestRecordPointersCollection& f_output) const
     {
         /// This will decrease the execution time by several milliseconds 
         /// but the used memory might be increased unnecessarely.
@@ -84,5 +84,26 @@ namespace xq
                 f_output.emplace_back(&rec);
             }
         });
+    }
+
+    void InMemoryDb::deleteRecordByID(uint32_t f_id)
+    {
+        DbTableTest emptyElement{};
+        std::replace_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+            return rec.id == f_id;
+        }, emptyElement);
+    }
+
+    uint64_t InMemoryDb::getNumberOfDeletedRecords() const
+    {
+        auto deletedRecordsNumber = std::count_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+            return rec.id == 0;
+            });
+        return static_cast<uint64_t>(deletedRecordsNumber);
+    }
+
+    uint64_t InMemoryDb::getNumberOfRecords() const
+    {
+        return m_records.size();
     }
 } /// namespace xq

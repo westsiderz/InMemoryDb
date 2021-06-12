@@ -43,27 +43,27 @@ namespace xq
         checkMatching(dummy);
     }
 
-    bool DbTableTestStringMatcher::checkMatching(const DbTableTest& f_record)
+    bool DbTableTestStringMatcher::checkMatching(const DbTableTest& f_record) const
     {
         return m_functionToExecute(f_record);
     }
 
-    bool DbTableTestStringMatcher::matchId(const DbTableTest& f_record)
+    bool DbTableTestStringMatcher::matchId(const DbTableTest& f_record) const
     {
         return f_record.id == m_uint32tToMatch;
     }
 
-    bool DbTableTestStringMatcher::matchName(const DbTableTest& f_record)
+    bool DbTableTestStringMatcher::matchName(const DbTableTest& f_record) const
     {
         return f_record.name.find(m_stringToMatch) != std::string::npos;
     }
 
-    bool DbTableTestStringMatcher::matchBalance(const DbTableTest& f_record)
+    bool DbTableTestStringMatcher::matchBalance(const DbTableTest& f_record) const
     {
         return f_record.balance == m_int64tToMatch;
     }
 
-    bool DbTableTestStringMatcher::matchAddress(const DbTableTest& f_record)
+    bool DbTableTestStringMatcher::matchAddress(const DbTableTest& f_record) const
     {
         return f_record.address.find(m_stringToMatch) != std::string::npos;
     }

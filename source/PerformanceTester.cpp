@@ -21,7 +21,7 @@ using namespace std::chrono;
 
 namespace xq
 {
-    void PerformanceTester::measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords)
+    void PerformanceTester::measureFindMatchingRecordsPerformanceOneRecord(uint64_t f_numberOfRecords) const
     {
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
@@ -55,7 +55,7 @@ namespace xq
         assert(resultCollection.size() == 1);
     }
 
-    void PerformanceTester::measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords)
+    void PerformanceTester::measureFindMatchingRecordsPerformanceSeveralRecords(uint64_t f_numberOfRecords) const
     {
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
@@ -87,11 +87,30 @@ namespace xq
         assert(filteredSet.size() == resultCollection.size());
     }
 
-    DbTestRecordCollection PerformanceTester::generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords)
+    void PerformanceTester::measureRemoveRecordByIdPerformance(uint64_t f_numberOfRecords, uint32_t f_id) const
+    {
+        auto testData = generateTestData("testdata", f_numberOfRecords);
+        std::cout << "Test data generated\n";
+
+        /// Test the Remove Records algorithm
+        TimeMeasurement timer{};
+        InMemoryDb database{ testData };
+        timer.startTimer();
+        database.deleteRecordByID(f_id);
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("AKRemoveRecordById");
+        timer.printTimeInSeconds("AKRemoveRecordById");
+        timer.resetTimer();
+
+        /// Check if only one record was deleted
+        assert(database.getNumberOfDeletedRecords() == 1);
+    }
+
+    DbTestRecordCollection PerformanceTester::generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords) const
     {
         DbTestRecordCollection data;
         data.reserve(f_numberOfRecords);
-        for (uint64_t i = 0; i < f_numberOfRecords; ++i)
+        for (uint64_t i = 1; i <= f_numberOfRecords; ++i)
         {
             DbTableTest rec{ static_cast<uint32_t>(i), f_prefixSuffix + std::to_string(i), static_cast<long>(i % 100), std::to_string(i) + f_prefixSuffix};
             data.emplace_back(rec);
@@ -100,7 +119,7 @@ namespace xq
     }
 
     DbTestRecordCollection PerformanceTester::QBFindMatchingRecords(const DbTestRecordCollection& f_records, 
-        const std::string& f_columnName, const std::string& f_matchString)
+        const std::string& f_columnName, const std::string& f_matchString) const
     {
         DbTestRecordCollection result;
         std::copy_if(f_records.begin(), f_records.end(), std::back_inserter(result), [&](DbTableTest rec) {
