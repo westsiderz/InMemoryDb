@@ -13,6 +13,7 @@
 #include "InMemoryDb.hpp"
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
 
 namespace xq
@@ -23,7 +24,7 @@ namespace xq
 	{
 	}
 
-	void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
+	/*void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
 		const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
 	{
         /// This will decrease the execution time by several milliseconds 
@@ -68,5 +69,21 @@ namespace xq
                 }
             });
         }
-	}
+	}*/
+
+    void InMemoryDb::findMatchingRecords(const std::string& f_columnName,
+        const std::string& f_matchString, DbTestRecordPointersCollection& f_output)
+    {
+        /// This will decrease the execution time by several milliseconds 
+        /// but the used memory might be increased unnecessarely.
+        /// f_output.reserve(m_records.size());
+        
+        DbTableTestStringMatcher tableTestStringMatcher{ f_columnName, f_matchString };
+        std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+            if (tableTestStringMatcher.checkMatching(rec))
+            {
+                f_output.emplace_back(&rec);
+            }
+        });
+    }
 } /// namespace xq
