@@ -28,6 +28,27 @@ namespace xq
 		/// @brief Class constructor with arguments.
 		/// @details Constructs the class using the given arguments.
 		InMemoryDb(const DbTestRecordCollection& f_records);
+
+		/// @brief Searches a set of records for a given string in a given column in a more optimized way.
+		/// @details This is an updated version of the original algorithm from Quickbase. It checks
+		/// what is the selected column, if needed transforms the given search string to a number
+		/// and checks if it matches with the content in the given column. This is a more optimized version
+		/// of the algorithm in the term of speed, but it is also with a table specific implementation, thus not allowing for the 
+		/// use of another table structure, without the respective changes. 
+		/// @param[in] f_columnName The name of the column to search in.
+		/// @param[in] f_matchString The string to search for.
+		/// @param[out] f_output Contains the records which match the search criteria.
+		void findMatchingRecordsOptimized(const std::string& f_columnName,
+			const std::string& f_matchString, DbTestRecordPointersCollection& f_output);
+
+		/// @brief Searches a set of records for a given string in a given column.
+		/// @details This is an updated version of the original algorithm from Quickbase. It stores the provided data 
+		/// in one DbTableTestStringMatcher and uses its methods to process the search. This is a less optimized version
+		/// of the algorithm in the term of speed, but the implementation is generalized and thus allows to use any kind of 
+		/// data table without significant changes, given that the table provides a string matcher class. 
+		/// @param[in] f_columnName The name of the column to search in.
+		/// @param[in] f_matchString The string to search for.
+		/// @param[out] f_output Contains the records which match the search criteria.
 		void findMatchingRecords(const std::string& f_columnName, 
 			const std::string& f_matchString, DbTestRecordPointersCollection& f_output);
 

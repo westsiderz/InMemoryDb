@@ -1,3 +1,15 @@
+/// @file DbTablesTest.cpp
+///
+/// @brief Implementation of the test table for the in-memory database.
+/// @details This struct will be used to describe a test table in the database
+/// used for performance tests. Also contains a class, which will take care to 
+/// match a given string with the content in a given column.
+/// @author Ahmed Karaibrahimov
+/// @version 1.0
+/// @date 6/12/2021
+/// @copyright Copyright 2021 Ahmed Karaibrahimov. All rights reserved.
+/// @license No license required at all. Use it as you wish
+
 #include "DbTableTest.hpp"
 
 namespace xq
