@@ -10,6 +10,8 @@
 #include "gtest/gtest.h"
 #include "TimeMeasurement.hpp"
 
+#include <string>
+
 /// @brief Test that the timer can be started successfully
 /// if it hasn't been started already.
 TEST(TimeMeasurement, StartTimerSuccess) {
@@ -82,7 +84,7 @@ TEST(TimeMeasurement, ResetTimerIfStarted) {
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 }
 
-/// @brief Test that the timer will be reset if it has been started.
+/// @brief Test that the timer will be reset if it has been stopped.
 TEST(TimeMeasurement, ResetTimerIfStopped) {
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
@@ -93,4 +95,76 @@ TEST(TimeMeasurement, ResetTimerIfStopped) {
 
 	timer.resetTimer();
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
+}
+
+/// @brief Test that the timer result is printed in seconds once it has been stopped.
+TEST(TimeMeasurement, PrintTimerResultInSecondsSuccess) {
+	xq::TimeMeasurement timer{};
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
+
+	timer.startTimer();
+	timer.stopTimer();
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::Stopped);
+
+	const std::string operationName{ "TestOperation" };
+	testing::internal::CaptureStdout();
+	timer.printTimeInSeconds(operationName);
+	std::string output = testing::internal::GetCapturedStdout();
+
+	auto firstTextPos = output.find("The operation TestOperation was executed in");
+	EXPECT_EQ(firstTextPos, 0);
+
+	auto lastTextPos = output.find(" seconds\n");
+	EXPECT_NE(lastTextPos, std::string::npos);
+}
+
+/// @brief Test that the timer result is not printed if the times hasn't been stopped.
+TEST(TimeMeasurement, PrintTimerResultInSecondsFails) {
+	xq::TimeMeasurement timer{};
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
+
+	timer.startTimer();
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::Started);
+
+	const std::string operationName{ "TestOperation" };
+	testing::internal::CaptureStdout();
+	timer.printTimeInSeconds(operationName);
+	std::string output = testing::internal::GetCapturedStdout();
+	EXPECT_EQ(output,"The timer was not started and stopped properly\n");
+}
+
+/// @brief Test that the timer result is printed in milliseconds once it has been stopped.
+TEST(TimeMeasurement, PrintTimerResultInMillisecondsSuccess) {
+	xq::TimeMeasurement timer{};
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
+
+	timer.startTimer();
+	timer.stopTimer();
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::Stopped);
+
+	const std::string operationName{ "TestOperation" };
+	testing::internal::CaptureStdout();
+	timer.printTimeInMilliseconds(operationName);
+	std::string output = testing::internal::GetCapturedStdout();
+
+	auto firstTextPos = output.find("The operation TestOperation was executed in");
+	EXPECT_EQ(firstTextPos, 0);
+
+	auto lastTextPos = output.find(" milliseconds\n");
+	EXPECT_NE(lastTextPos, std::string::npos);
+}
+
+/// @brief Test that the timer result is not printed if the times hasn't been stopped.
+TEST(TimeMeasurement, PrintTimerResultInMillisecondsFails) {
+	xq::TimeMeasurement timer{};
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
+
+	timer.startTimer();
+	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::Started);
+
+	const std::string operationName{ "TestOperation" };
+	testing::internal::CaptureStdout();
+	timer.printTimeInMilliseconds(operationName);
+	std::string output = testing::internal::GetCapturedStdout();
+	EXPECT_EQ(output, "The timer was not started and stopped properly\n");
 }
