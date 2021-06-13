@@ -16,7 +16,7 @@ namespace xq
 {
     DbTableTestStringMatcher::DbTableTestStringMatcher(const std::string& f_columnName, const std::string& f_stringToMatch)
     {
-        /// Select the value to be searched for and the function to execute the respective search
+        // Select the value to be searched for and the function to execute the respective search
         if (f_columnName == "column0")
         {
             m_uint64tToMatch = std::stoul(f_stringToMatch);
@@ -38,8 +38,8 @@ namespace xq
             m_functionToExecute = std::bind(&DbTableTestStringMatcher::matchAddress, this, std::placeholders::_1);
         }
 
-        /// A workaround: The checkMatching() function is not inlined and instead gets removed by the compiler.
-        /// Adding call to it here fixes this
+        // A workaround: The checkMatching() function is not inlined and instead gets removed by the compiler.
+        // Adding call to it here fixes this
         DbTableTest dummy{};
         checkMatching(dummy);
     }

@@ -26,10 +26,10 @@ namespace xq
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
 
-        /// Set the search string to be unique
+        // Set the search string to be unique
         auto searchString = "testdata" + std::to_string(f_numberOfRecords / 2);
 
-        /// Test the original algorithm from Quickbase
+        // Test the original algorithm from Quickbase
         TimeMeasurement timer{};
         timer.startTimer();
         auto filteredSet = QBFindMatchingRecords(testData, "column1", searchString);
@@ -39,7 +39,7 @@ namespace xq
         timer.printTimeInSeconds("QBFindMatchingRecords");
         timer.resetTimer();
 
-        /// Test my improved algorithm
+        // Test my improved algorithm
         InMemoryDb database{ testData };
         DbTestRecordPointersCollection resultCollection{};
         timer.startTimer();
@@ -50,7 +50,7 @@ namespace xq
         timer.printTimeInSeconds("AKFindMatchingRecords");
         timer.resetTimer();
 
-        /// Make sure that the function is correct
+        // Make sure that the function is correct
         assert(filteredSet.size() == 1);
         assert(resultCollection.size() == 1);
     }
@@ -60,7 +60,7 @@ namespace xq
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
 
-        /// Test the original algorithm from Quickbase
+        // Test the original algorithm from Quickbase
         TimeMeasurement timer{};
         timer.startTimer();
         auto filteredSet = QBFindMatchingRecords(testData, "column1", "testdata");
@@ -70,7 +70,7 @@ namespace xq
         timer.printTimeInSeconds("QBFindMatchingRecords");
         timer.resetTimer();
 
-        /// Test my improved algorithm
+        // Test my improved algorithm
         InMemoryDb database{ testData };
         DbTestRecordPointersCollection resultCollection{};
         timer.startTimer();
@@ -81,7 +81,7 @@ namespace xq
         timer.printTimeInSeconds("AKFindMatchingRecords");
         timer.resetTimer();
 
-        /// Make sure that the function is correct
+        // Make sure that the function is correct
         assert(filteredSet.size() >= 1);
         assert(resultCollection.size() >= 1);
         assert(filteredSet.size() == resultCollection.size());
@@ -92,7 +92,7 @@ namespace xq
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
 
-        /// Test the Remove Records algorithm
+        // Test the Remove Records algorithm
         TimeMeasurement timer{};
         InMemoryDb database{ testData };
         timer.startTimer();
@@ -102,7 +102,7 @@ namespace xq
         timer.printTimeInSeconds("AKRemoveRecordById");
         timer.resetTimer();
 
-        /// Check if only one record was deleted
+        // Check if only one record was deleted
         assert(database.getNumberOfDeletedRecords() == 1);
     }
 
@@ -111,7 +111,7 @@ namespace xq
         auto testData = generateTestData("testdata", f_numberOfRecords);
         std::cout << "Test data generated\n";
 
-        /// Test the Remove Record and Add New Record
+        // Test the Remove Record and Add New Record
         TimeMeasurement timer{};
         InMemoryDb database{ testData };
         DbTableTest newRecord{ f_numberOfRecords + 1,  "testdata" + std::to_string(f_numberOfRecords + 1), 1988, "dataTest" };
@@ -123,11 +123,11 @@ namespace xq
         timer.printTimeInSeconds("AKRemoveRecordByIdAddNewRecord");
         timer.resetTimer();
 
-        /// Check if only one record was deleted
+        // Check if only one record was deleted
         assert(database.getNumberOfDeletedRecords() == 0);
         assert(database.getNumberOfRecords() == f_numberOfRecords);
 
-        /// Test Add New Record at the end
+        // Test Add New Record at the end
         DbTableTest newRecord2{ f_numberOfRecords + 2,  "testdata" + std::to_string(f_numberOfRecords + 2), 1988, "dataTest" };
         timer.startTimer();
         database.addRecord(newRecord2);
@@ -136,7 +136,7 @@ namespace xq
         timer.printTimeInSeconds("AKAddNewRecord");
         timer.resetTimer();
 
-        /// Check if only one record was deleted
+        // Check if only one record was deleted
         assert(database.getNumberOfDeletedRecords() == 0);
         assert(database.getNumberOfRecords() == f_numberOfRecords + 1);
     }

@@ -22,7 +22,7 @@ namespace xq
 {
     struct DbTableTest;
 
-    /// Definitions for the Records Collections
+    // Definitions for the Records Collections
     typedef std::vector<DbTableTest> DbTestRecordCollection;
     typedef std::vector<const DbTableTest*> DbTestRecordPointersCollection;
 

@@ -16,7 +16,7 @@ namespace xq
 {
 	void TimeMeasurement::startTimer()
 	{
-		/// The timer can be started only if it hasn't been started already
+		// The timer can be started only if it hasn't been started already
 		if (m_timerStatus != TimerStatus::Started)
 		{
 			m_startTime = std::chrono::steady_clock::now();
@@ -30,7 +30,7 @@ namespace xq
 
 	void TimeMeasurement::stopTimer()
 	{
-		/// The timer can be stopped only if it has been Started already
+		// The timer can be stopped only if it has been Started already
 		if (m_timerStatus == TimerStatus::Started)
 		{
 			m_endTime = std::chrono::steady_clock::now();
@@ -49,7 +49,7 @@ namespace xq
 
 	void TimeMeasurement::printTimeInSeconds(const std::string& f_operationName) const
 	{
-		/// Print the result only if the timer has been started and then stopped
+		// Print the result only if the timer has been started and then stopped
 		if (m_timerStatus == TimerStatus::Stopped)
 		{
 			std::chrono::duration<double> executionTimeInSeconds = m_endTime - m_startTime;
@@ -63,7 +63,7 @@ namespace xq
 
 	void TimeMeasurement::printTimeInMilliseconds(const std::string& f_operationName) const
 	{
-		/// Print the result only if the timer has been started and then stopped
+		// Print the result only if the timer has been started and then stopped
 		if (m_timerStatus == TimerStatus::Stopped)
 		{
 			auto executionTimeInMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(m_endTime - m_startTime).count();
