@@ -74,4 +74,9 @@ namespace xq
 			std::cout << "The timer was not started and stopped properly\n";
 		}
 	}
+
+	TimerStatus TimeMeasurement::getTimerState() const
+	{
+		return m_timerStatus;
+	}
 } /// namespace xq

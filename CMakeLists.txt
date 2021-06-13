@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.14)
 
 # Include a CMake file containing helpful macros
 include(${CMAKE_CURRENT_SOURCE_DIR}/Macros.cmake)
@@ -35,4 +35,6 @@ else()
 													-Werror)
 
 endif()
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/utest)
 

@@ -59,6 +59,10 @@ namespace xq
 		/// @param[in] f_operationName The name of the measured operation.  
 		void printTimeInMilliseconds(const std::string& f_operationName) const;
 
+		/// @brief Get the state of the timer.
+		/// @returns The current state of the timer.
+		TimerStatus getTimerState() const;
+
 	private:
 		std::chrono::steady_clock::time_point m_startTime{}; ///< The time point when the timer was started.
 		std::chrono::steady_clock::time_point m_endTime{}; ///< The time point when the timer was stopped.
