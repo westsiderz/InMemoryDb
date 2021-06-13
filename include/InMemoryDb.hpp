@@ -70,6 +70,12 @@ namespace xq
 		/// @param[in] f_id The id of the record to be deleted.
 		void deleteRecordByIDNonOptimized(uint32_t f_id);
 
+		/// @brief Add a new record to the database.
+		/// @details First checks if there is a free slot in the database by looking at m_freeIds. In case there is,
+		/// put the new record on its place. In case there is non, push the new record at the back of the records' collection.
+		/// @param[in] f_newRecord The new record to be added.
+		void addRecord(const DbTableTest& f_newRecord);
+
 		/// @brief Gets the number of deleted records.
 		/// @details Gets the number of elements in the m_freeIds member variable.
 		/// @returns Number of deleted records.
@@ -81,7 +87,7 @@ namespace xq
 
 	private:
 		DbTestRecordCollection m_records; ///< Collection with all the users records.
-		DbFreeIdsCollection m_freeIds; ///< Collection with IDs of deleted records, which can be used to add new records.
+		DbFreeIdsCollection m_freeIndexes; ///< Collection with indexes of deleted records, which can be used to add new records.
 	};
 } /// namespace xq
 #endif /// !IN_MEMORY_DB_HPP

@@ -30,9 +30,14 @@ namespace xq
         /// but the used memory might be increased unnecessarely.
         f_output.reserve(m_records.size());
         
+        /// First check what column we are looking at before any processing of the records
         if (f_columnName == "column0")
         {
+            /// Get the numeric value from the string before the processing of the records 
+            /// instead of getting it with each record's processing
             uint32_t matchValue = std::stoul(f_matchString);
+
+            /// Traverse all records searching for a matching IDs
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (matchValue == rec.id)
                 {
@@ -42,6 +47,7 @@ namespace xq
         }
         else if (f_columnName == "column1")
         {
+            /// Traverse all records searching for a matching Name
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (rec.name.find(f_matchString) != std::string::npos)
                 {
@@ -51,7 +57,10 @@ namespace xq
         }
         else if (f_columnName == "column2")
         {
+            /// Get the numeric value from the string before the processing of the records 
+            /// instead of getting it with each record's processing
             int64_t matchValue = std::stol(f_matchString);
+            /// Traverse all records searching for a matching Balance
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (matchValue == rec.balance)
                 {
@@ -61,6 +70,7 @@ namespace xq
         }
         else if (f_columnName == "column3")
         {
+            /// Traverse all records searching for a matching Address
             std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
                 if (rec.address.find(f_matchString) != std::string::npos)
                 {
@@ -82,6 +92,7 @@ namespace xq
             /// Check if the record is not deleted already
             if (rec.id != 0)
             {
+                /// Search for matching records
                 if (tableTestStringMatcher.checkMatching(rec))
                 {
                     f_output.emplace_back(&rec);
@@ -93,12 +104,13 @@ namespace xq
     void InMemoryDb::deleteRecordByID(uint32_t f_id)
     {
         DbTableTest emptyElement{};
+        /// Look for a record wi the matching ID and once found, replace it with empty record. Stop any further processing of the records
         auto foundRecordIter = std::find_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
             return rec.id == f_id; });
         if (foundRecordIter != m_records.end())
         {
-            /// Save the id of the deleted record for a later use
-            m_freeIds.push(foundRecordIter->id);
+            /// Save the index of the deleted record for a later use
+            m_freeIndexes.push(foundRecordIter->id);
 
             /// Replace the record that has to be deleted with an empty one
             *foundRecordIter = emptyElement;
@@ -107,18 +119,45 @@ namespace xq
 
     void InMemoryDb::deleteRecordByIDNonOptimized(uint32_t f_id)
     {
+        /// Remove a record with a matching ID from the collection of records
         m_records.erase(std::remove_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
             return rec.id == f_id;
         }));
     }
 
+    void InMemoryDb::addRecord(const DbTableTest& f_newRecord)
+    {
+        /// Check if we have available slot already
+        if (m_freeIndexes.size() > 0)
+        {
+            auto freeIndex = m_freeIndexes.front();
+            m_freeIndexes.pop();
+            /// Check just in case that we haven't gotten any wrong index out of bounds
+            if (freeIndex < m_records.size())
+            {
+                /// Replace an existing free slot with the new record
+                m_records.at(freeIndex) = f_newRecord;
+            }
+            /// If the index was wrong, place the new record at the end of the collection
+            else
+            {
+                m_records.emplace_back(f_newRecord);
+            }
+        }
+        else
+        {
+            /// No free slots available, push the record at the end
+            m_records.emplace_back(f_newRecord);
+        }
+    }
+
     uint64_t InMemoryDb::getNumberOfDeletedRecords() const
     {
-        return m_freeIds.size();
+        return m_freeIndexes.size();
     }
 
     uint64_t InMemoryDb::getNumberOfRecords() const
     {
-        return m_records.size() - m_freeIds.size();
+        return m_records.size() - m_freeIndexes.size();
     }
 } /// namespace xq

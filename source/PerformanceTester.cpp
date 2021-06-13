@@ -106,6 +106,41 @@ namespace xq
         assert(database.getNumberOfDeletedRecords() == 1);
     }
 
+    void PerformanceTester::measureAddNewRecord(uint64_t f_numberOfRecords, uint32_t f_id) const
+    {
+        auto testData = generateTestData("testdata", f_numberOfRecords);
+        std::cout << "Test data generated\n";
+
+        /// Test the Remove Record and Add New Record
+        TimeMeasurement timer{};
+        InMemoryDb database{ testData };
+        DbTableTest newRecord{ f_numberOfRecords + 1,  "testdata" + std::to_string(f_numberOfRecords + 1), 1988, "dataTest" };
+        timer.startTimer();
+        database.deleteRecordByID(f_id);
+        database.addRecord(newRecord);
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("AKRemoveRecordByIdAddNewRecord");
+        timer.printTimeInSeconds("AKRemoveRecordByIdAddNewRecord");
+        timer.resetTimer();
+
+        /// Check if only one record was deleted
+        assert(database.getNumberOfDeletedRecords() == 0);
+        assert(database.getNumberOfRecords() == f_numberOfRecords);
+
+        /// Test Add New Record at the end
+        DbTableTest newRecord2{ f_numberOfRecords + 2,  "testdata" + std::to_string(f_numberOfRecords + 2), 1988, "dataTest" };
+        timer.startTimer();
+        database.addRecord(newRecord2);
+        timer.stopTimer();
+        timer.printTimeInMilliseconds("AKAddNewRecord");
+        timer.printTimeInSeconds("AKAddNewRecord");
+        timer.resetTimer();
+
+        /// Check if only one record was deleted
+        assert(database.getNumberOfDeletedRecords() == 0);
+        assert(database.getNumberOfRecords() == f_numberOfRecords + 1);
+    }
+
     DbTestRecordCollection PerformanceTester::generateTestData(const std::string& f_prefixSuffix, uint64_t f_numberOfRecords) const
     {
         DbTestRecordCollection data;

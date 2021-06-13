@@ -16,6 +16,7 @@ namespace xq
 {
     DbTableTestStringMatcher::DbTableTestStringMatcher(const std::string& f_columnName, const std::string& f_stringToMatch)
     {
+        /// Select the value to be searched for and the function to execute the respective search
         if (f_columnName == "column0")
         {
             m_uint64tToMatch = std::stoul(f_stringToMatch);

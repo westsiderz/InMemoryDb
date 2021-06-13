@@ -38,7 +38,7 @@ void testFindMatchingRecord()
 void testRemoveRecordById()
 {
 	xq::PerformanceTester tester{};
-	/// Test with same amount of records several times
+	/// Test removing a record from the database
 	std::cout << "Testing Remove Record By ID\n";
 	for (uint32_t i = 0; i < cNumberOfTestExecutionsDeleteRecords; ++i)
 	{
@@ -50,9 +50,25 @@ void testRemoveRecordById()
 	std::cout << "\n";
 }
 
+void testAddNewRecord()
+{
+	xq::PerformanceTester tester{};
+	/// Test adding a new record to the database
+	std::cout << "Testing Add New Record\n";
+	for (uint32_t i = 0; i < cNumberOfTestExecutionsDeleteRecords; ++i)
+	{
+		auto recordsIdToDelete = static_cast<uint32_t>(pow(static_cast<double>(cIfDeleteRecords), static_cast<double>(i + 1)));
+		std::cout << "Starting test #" << i + 1 << " with record id = " << recordsIdToDelete << " records\n";
+		tester.measureAddNewRecord(cNumberOfTestRecordsSameAmount, recordsIdToDelete);
+		std::cout << "\n";
+	}
+	std::cout << "\n";
+}
+
 int main()
 {
-	testFindMatchingRecord();
-	testRemoveRecordById();
+	//testFindMatchingRecord();
+	//testRemoveRecordById();
+	testAddNewRecord();
 	return 0;
 }

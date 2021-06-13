@@ -41,6 +41,13 @@ namespace xq
 		/// @param[in] f_id The ID of the record to be deleted. 
 		void measureRemoveRecordByIdPerformance(uint64_t f_numberOfRecords, uint32_t f_id) const;
 
+		/// @brief Measure the time to add new record.
+		/// @details Measure the time to delete an existing record and add a new one on its place
+		/// and also add new record at the end of the collection.
+		/// @param[in] f_numberOfRecords The number of total records to generate and search among. 
+		/// @param[in] f_id The ID of the record to be deleted. 
+		void measureAddNewRecord(uint64_t f_numberOfRecords, uint32_t f_id) const;
+
 	private:
 		/// @brief Generates test data.
 		/// @details Generates test data to be used for testing the algorithms and store it in a collection.
