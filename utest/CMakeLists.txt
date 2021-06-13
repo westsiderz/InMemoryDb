@@ -16,7 +16,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Collect all the header and source files
-# ListHeaderFiles(FALSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+ListHeaderFiles(FALSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 ListSourceFiles(FALSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Collect the source files of the InMemoryDb. We need to build them
@@ -33,7 +33,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/i
 												   ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 # Add filters in Visual Studio to hold the source files
-# source_group("Header Files" FILES ${HEADER_FILES})
+source_group("Header Files" FILES ${HEADER_FILES})
 source_group("Source Files" FILES ${SOURCE_FILES})
 source_group("Source Files/InMemoryDb" FILES ${SOURCE_FILES_PROJECT})
 

@@ -10,8 +10,6 @@
 #include "gtest/gtest.h"
 #include "TimeMeasurement.hpp"
 
-#include <string>
-
 /// @brief Test that the timer can be started successfully
 /// if it hasn't been started already.
 TEST(TimeMeasurement, StartTimerSuccess) {

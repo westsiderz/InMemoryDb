@@ -120,9 +120,13 @@ namespace xq
     void InMemoryDb::deleteRecordByIDNonOptimized(uint32_t f_id)
     {
         // Remove a record with a matching ID from the collection of records
-        m_records.erase(std::remove_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+        auto removeIter = std::remove_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
             return rec.id == f_id;
-        }));
+            });
+        if (removeIter != m_records.end())
+        {
+            m_records.erase(removeIter);
+        }
     }
 
     void InMemoryDb::addRecord(const DbTableTest& f_newRecord)
