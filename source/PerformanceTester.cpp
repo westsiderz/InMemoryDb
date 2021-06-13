@@ -112,7 +112,7 @@ namespace xq
         data.reserve(f_numberOfRecords);
         for (uint64_t i = 1; i <= f_numberOfRecords; ++i)
         {
-            DbTableTest rec{ static_cast<uint32_t>(i), f_prefixSuffix + std::to_string(i), static_cast<long>(i % 100), std::to_string(i) + f_prefixSuffix};
+            DbTableTest rec{i, f_prefixSuffix + std::to_string(i), static_cast<int32_t>(i % 100), std::to_string(i) + f_prefixSuffix};
             data.emplace_back(rec);
         }
         return data;
@@ -124,12 +124,12 @@ namespace xq
         DbTestRecordCollection result;
         std::copy_if(f_records.begin(), f_records.end(), std::back_inserter(result), [&](DbTableTest rec) {
             if (f_columnName == "column0") {
-                uint32_t matchValue = std::stoul(f_matchString);
+                uint64_t matchValue = std::stoul(f_matchString);
                 return matchValue == rec.id;
             }else if (f_columnName == "column1") {
                 return rec.name.find(f_matchString) != std::string::npos;
             }else if (f_columnName == "column2") {
-                long matchValue = std::stol(f_matchString);
+                int32_t matchValue = std::stoi(f_matchString);
                 return matchValue == rec.balance;
             }else if (f_columnName == "column3") {
                 return rec.address.find(f_matchString) != std::string::npos;

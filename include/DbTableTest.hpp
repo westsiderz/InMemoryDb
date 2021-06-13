@@ -31,9 +31,9 @@ namespace xq
     /// @brief Provides table record structure for recording user data.
     struct DbTableTest
     {
-        uint32_t id; ///< Unique id column.  
+        uint64_t id; ///< Unique id column.  
         std::string name; ///< Name of the user.
-        int64_t balance; ///< Balance of the user.
+        int32_t balance; ///< Balance of the user.
         std::string address; ///< Surname of the user.    
     };
 
@@ -84,8 +84,8 @@ namespace xq
 
         std::function<bool(const DbTableTest&)> m_functionToExecute; ///< Pointer to a function to be executed for the current search.
         std::string m_stringToMatch; ///< The string value to match against any column of type string.
-        uint32_t m_uint32tToMatch; ///< The integer value to match against any column of type integer.
-        int64_t m_int64tToMatch; ///< The long value to match against any column of type long.
+        int32_t m_int32tToMatch; ///< The integer value to match against any column of type integer.
+        uint64_t m_uint64tToMatch; ///< The long value to match against any column of type long.
     };
 } /// namespace xq
 #endif /// !DB_TABLE_TEST_HPP

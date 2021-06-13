@@ -4,9 +4,11 @@
 
 /// Settings for the performance tests
 constexpr uint64_t const cNumberOfTestRecordsSameAmount{ 1000000 };
+constexpr uint32_t const cNumberOfTestExecutionsSameAmount{ 5 };
 constexpr uint32_t const cNumberOfTestRecordsDifferentAmountPower{ 10 };
-constexpr uint32_t const cNumberOfTestExecutionsSameAmount{ 10 };
 constexpr uint32_t const cNumberOfTestExecutionsdifferentAmount{ 6 };
+constexpr uint32_t const cIfDeleteRecords{ 10 };
+constexpr uint32_t const cNumberOfTestExecutionsDeleteRecords{ 5 };
 
 void testFindMatchingRecord()
 {
@@ -25,9 +27,9 @@ void testFindMatchingRecord()
 	std::cout << "Testing Find Matching Records with different anounts of records\n";
 	for (uint32_t i = 0; i < cNumberOfTestExecutionsdifferentAmount; ++i)
 	{
-		auto executionTimes = static_cast<uint64_t>(pow(static_cast<double>(cNumberOfTestRecordsDifferentAmountPower), static_cast<double>(i + 2)));
-		std::cout << "Starting test #" << i + 1 << " with " << executionTimes << " records\n";
-		tester.measureFindMatchingRecordsPerformanceSeveralRecords(executionTimes);
+		auto numberOfRecords = static_cast<uint64_t>(pow(static_cast<double>(cNumberOfTestRecordsDifferentAmountPower), static_cast<double>(i + 2)));
+		std::cout << "Starting test #" << i + 1 << " with " << numberOfRecords << " records\n";
+		tester.measureFindMatchingRecordsPerformanceSeveralRecords(numberOfRecords);
 		std::cout << "\n";
 	}
 	std::cout << "\n";
@@ -38,10 +40,11 @@ void testRemoveRecordById()
 	xq::PerformanceTester tester{};
 	/// Test with same amount of records several times
 	std::cout << "Testing Remove Record By ID\n";
-	for (uint32_t i = 0; i < cNumberOfTestExecutionsSameAmount; ++i)
+	for (uint32_t i = 0; i < cNumberOfTestExecutionsDeleteRecords; ++i)
 	{
-		std::cout << "Starting test #" << i + 1 << " with " << cNumberOfTestRecordsSameAmount << " records\n";
-		tester.measureRemoveRecordByIdPerformance(cNumberOfTestRecordsSameAmount, 100);
+		auto recordsIdToDelete = static_cast<uint32_t>(pow(static_cast<double>(cIfDeleteRecords), static_cast<double>(i + 1)));
+		std::cout << "Starting test #" << i + 1 << " with record id = " << recordsIdToDelete << " records\n";
+		tester.measureRemoveRecordByIdPerformance(cNumberOfTestRecordsSameAmount, recordsIdToDelete);
 		std::cout << "\n";
 	}
 	std::cout << "\n";
@@ -49,6 +52,7 @@ void testRemoveRecordById()
 
 int main()
 {
+	testFindMatchingRecord();
 	testRemoveRecordById();
 	return 0;
 }

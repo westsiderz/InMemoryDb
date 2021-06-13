@@ -15,8 +15,11 @@
 
 #include "DbTableTest.hpp"
 
+#include <queue>
+
 namespace xq
 {
+	typedef std::queue<uint64_t> DbFreeIdsCollection;
 	/// @class InMemoryDb
 	/// @brief In-memory database class.
 	/// @details Provides implementation of a database which is hosted
@@ -53,21 +56,32 @@ namespace xq
 			const std::string& f_matchString, DbTestRecordPointersCollection& f_output) const;
 
 		/// @brief Delete a record from the database with the given id.
-		/// @details TBD
+		/// @details Traverses the whole collection of records and looks for a record, which matches the selected Id.
+		/// Sets that record's ID to 0 which annotates that the record is deleted. The record is not actually removed from the collection
+		/// because this is a costly operation but instead it's index is saved in another collection to be used later when adding new record.
+		/// This way deleting new records will not require shifting of the remaining and adding new record might not require reallocation
+		/// of new memory.
 		/// @param[in] f_id The id of the record to be deleted.
 		void deleteRecordByID(uint32_t f_id);
 
-		/// @brief Gets the number of deleted records
-		/// @details Goes through all records and find any with ID=0 which is considered deleted.
+		/// @brief Delete a record from the database with the given id in a non-optimized way.
+		/// @details Traverses the whole collection of records and looks for a record, which matches the selected Id.
+		/// Removes the record from the collection, which also causes all the aftercomming records to be shifted.
+		/// @param[in] f_id The id of the record to be deleted.
+		void deleteRecordByIDNonOptimized(uint32_t f_id);
+
+		/// @brief Gets the number of deleted records.
+		/// @details Gets the number of elements in the m_freeIds member variable.
 		/// @returns Number of deleted records.
 		uint64_t getNumberOfDeletedRecords() const;
 
 		/// @brief Get the number of records in the database.
-		/// @returns The number of available records.
+		/// @returns The number of available records, which are not considered deleted.
 		uint64_t getNumberOfRecords() const;
 
 	private:
 		DbTestRecordCollection m_records; ///< Collection with all the users records.
+		DbFreeIdsCollection m_freeIds; ///< Collection with IDs of deleted records, which can be used to add new records.
 	};
 } /// namespace xq
 #endif /// !IN_MEMORY_DB_HPP

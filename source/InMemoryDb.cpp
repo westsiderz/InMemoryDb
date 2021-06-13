@@ -79,9 +79,13 @@ namespace xq
         
         DbTableTestStringMatcher tableTestStringMatcher{ f_columnName, f_matchString };
         std::for_each(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
-            if (tableTestStringMatcher.checkMatching(rec))
+            /// Check if the record is not deleted already
+            if (rec.id != 0)
             {
-                f_output.emplace_back(&rec);
+                if (tableTestStringMatcher.checkMatching(rec))
+                {
+                    f_output.emplace_back(&rec);
+                }
             }
         });
     }
@@ -89,21 +93,32 @@ namespace xq
     void InMemoryDb::deleteRecordByID(uint32_t f_id)
     {
         DbTableTest emptyElement{};
-        std::replace_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+        auto foundRecordIter = std::find_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
+            return rec.id == f_id; });
+        if (foundRecordIter != m_records.end())
+        {
+            /// Save the id of the deleted record for a later use
+            m_freeIds.push(foundRecordIter->id);
+
+            /// Replace the record that has to be deleted with an empty one
+            *foundRecordIter = emptyElement;
+        }
+    }
+
+    void InMemoryDb::deleteRecordByIDNonOptimized(uint32_t f_id)
+    {
+        m_records.erase(std::remove_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
             return rec.id == f_id;
-        }, emptyElement);
+        }));
     }
 
     uint64_t InMemoryDb::getNumberOfDeletedRecords() const
     {
-        auto deletedRecordsNumber = std::count_if(m_records.begin(), m_records.end(), [&](const DbTableTest& rec) {
-            return rec.id == 0;
-            });
-        return static_cast<uint64_t>(deletedRecordsNumber);
+        return m_freeIds.size();
     }
 
     uint64_t InMemoryDb::getNumberOfRecords() const
     {
-        return m_records.size();
+        return m_records.size() - m_freeIds.size();
     }
 } /// namespace xq

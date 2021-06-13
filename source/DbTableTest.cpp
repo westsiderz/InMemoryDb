@@ -18,7 +18,7 @@ namespace xq
     {
         if (f_columnName == "column0")
         {
-            m_uint32tToMatch = std::stoul(f_stringToMatch);
+            m_uint64tToMatch = std::stoul(f_stringToMatch);
             m_functionToExecute = std::bind(&DbTableTestStringMatcher::matchId, this, std::placeholders::_1);
         }
         else if (f_columnName == "column1")
@@ -28,7 +28,7 @@ namespace xq
         }
         else if (f_columnName == "column2")
         {
-            m_int64tToMatch = std::stol(f_stringToMatch);
+            m_int32tToMatch = std::stoi(f_stringToMatch);
             m_functionToExecute = std::bind(&DbTableTestStringMatcher::matchBalance, this, std::placeholders::_1);
         }
         else
@@ -50,7 +50,7 @@ namespace xq
 
     bool DbTableTestStringMatcher::matchId(const DbTableTest& f_record) const
     {
-        return f_record.id == m_uint32tToMatch;
+        return f_record.id == m_uint64tToMatch;
     }
 
     bool DbTableTestStringMatcher::matchName(const DbTableTest& f_record) const
@@ -60,7 +60,7 @@ namespace xq
 
     bool DbTableTestStringMatcher::matchBalance(const DbTableTest& f_record) const
     {
-        return f_record.balance == m_int64tToMatch;
+        return f_record.balance == m_int32tToMatch;
     }
 
     bool DbTableTestStringMatcher::matchAddress(const DbTableTest& f_record) const
