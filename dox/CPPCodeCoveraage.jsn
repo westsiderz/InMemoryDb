@@ -1,0 +1,15 @@
+sources=source\*
+sources=include\*
+modules=InMemoryDbUnitTests
+excluded_sources=*utest*
+excluded_modules=InMemoryDb
+export_type=html:F:\My Projects\Cpp\Quickbase\InMemoryDb\dox\coverage
+export_type=binary:C:\Users\froze\AppData\Local\Temp\sp3wy3ff.hga
+sources=F:\My Projects\Cpp\Quickbase\InMemoryDb
+sources=F:\My Projects\Cpp\Quickbase\InMemoryDb\build\utest
+sources=F:\My Projects\Cpp\Quickbase\InMemoryDb\source
+sources=F:\My Projects\Cpp\Quickbase\InMemoryDb\utest
+modules=F:\My Projects\Cpp\Quickbase\InMemoryDb\build\Debug\InMemoryDb.exe
+modules=F:\My Projects\Cpp\Quickbase\InMemoryDb\build\utest\Debug\InMemoryDbUnitTests.exe
+working_dir=F:\My Projects\Cpp\Quickbase\InMemoryDb
+plugin=true

@@ -536,11 +536,39 @@ namespace xq
         setupTest(100);
         ASSERT_NE(m_inMemoryDb, nullptr);
 
-        DbTableTest testRecord{};
+        DbTableTest testRecord{101, "testdata101", 101, "101testdata"};
 
         m_inMemoryDb->addRecord(testRecord);
         EXPECT_EQ(m_inMemoryDb->getNumberOfDeletedRecords(), 0);
         EXPECT_EQ(m_inMemoryDb->getNumberOfRecords(), 101);
+
+        // Verify that the new record is available
+        DbTestRecordPointersCollection f_output{};
+
+        m_inMemoryDb->findMatchingRecords("column1", "testdata101", f_output);
+        ASSERT_EQ(f_output.size(), 1);
+    }
+
+    /// @brief Test adding a new record after deleting an old one.
+    TEST_F(InMemoryDbTest, AddRecordWithDelete)
+    {
+        // Initial setup of the test. Verify that the In-memory
+        // database object is constructed successfully.
+        setupTest(100);
+        ASSERT_NE(m_inMemoryDb, nullptr);
+
+        m_inMemoryDb->deleteRecordByID(88);
+
+        DbTableTest testRecord{ 101, "testdata101", 101, "101testdata" };
+        m_inMemoryDb->addRecord(testRecord);
+        EXPECT_EQ(m_inMemoryDb->getNumberOfDeletedRecords(), 0);
+        EXPECT_EQ(m_inMemoryDb->getNumberOfRecords(), 100);
+
+        // Verify that the new record is available
+        DbTestRecordPointersCollection f_output{};
+
+        m_inMemoryDb->findMatchingRecords("column1", "testdata101", f_output);
+        ASSERT_EQ(f_output.size(), 1);
     }
 }
 

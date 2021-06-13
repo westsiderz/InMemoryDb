@@ -12,7 +12,8 @@
 
 /// @brief Test that the timer can be started successfully
 /// if it hasn't been started already.
-TEST(TimeMeasurement, StartTimerSuccess) {
+TEST(TimeMeasurement, StartTimerSuccess) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -21,7 +22,8 @@ TEST(TimeMeasurement, StartTimerSuccess) {
 }
 
 /// @brief Test that the timer start will fail if it has been started already.
-TEST(TimeMeasurement, StartTimerSecondTimeFails) {
+TEST(TimeMeasurement, StartTimerSecondTimeFails) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -35,7 +37,8 @@ TEST(TimeMeasurement, StartTimerSecondTimeFails) {
 
 /// @brief Test that the timer can be stopped successfully
 /// if it has been started first.
-TEST(TimeMeasurement, StopTimerSuccess) {
+TEST(TimeMeasurement, StopTimerSuccess) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -45,7 +48,8 @@ TEST(TimeMeasurement, StopTimerSuccess) {
 }
 
 /// @brief Test that the timer stop will fail if it hasn't been started already.
-TEST(TimeMeasurement, StopTimerFailsIfNotStarted) {
+TEST(TimeMeasurement, StopTimerFailsIfNotStarted)
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -57,7 +61,8 @@ TEST(TimeMeasurement, StopTimerFailsIfNotStarted) {
 }
 
 /// @brief Test that the timer stop will fail if a second attempt to be stopped is made.
-TEST(TimeMeasurement, StopTimerSecondTimeFails) {
+TEST(TimeMeasurement, StopTimerSecondTimeFails) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -71,7 +76,8 @@ TEST(TimeMeasurement, StopTimerSecondTimeFails) {
 }
 
 /// @brief Test that the timer will be reset if it has been started.
-TEST(TimeMeasurement, ResetTimerIfStarted) {
+TEST(TimeMeasurement, ResetTimerIfStarted) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -83,7 +89,8 @@ TEST(TimeMeasurement, ResetTimerIfStarted) {
 }
 
 /// @brief Test that the timer will be reset if it has been stopped.
-TEST(TimeMeasurement, ResetTimerIfStopped) {
+TEST(TimeMeasurement, ResetTimerIfStopped) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -96,7 +103,8 @@ TEST(TimeMeasurement, ResetTimerIfStopped) {
 }
 
 /// @brief Test that the timer result is printed in seconds once it has been stopped.
-TEST(TimeMeasurement, PrintTimerResultInSecondsSuccess) {
+TEST(TimeMeasurement, PrintTimerResultInSecondsSuccess) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -117,7 +125,8 @@ TEST(TimeMeasurement, PrintTimerResultInSecondsSuccess) {
 }
 
 /// @brief Test that the timer result is not printed if the times hasn't been stopped.
-TEST(TimeMeasurement, PrintTimerResultInSecondsFails) {
+TEST(TimeMeasurement, PrintTimerResultInSecondsFails) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -132,7 +141,8 @@ TEST(TimeMeasurement, PrintTimerResultInSecondsFails) {
 }
 
 /// @brief Test that the timer result is printed in milliseconds once it has been stopped.
-TEST(TimeMeasurement, PrintTimerResultInMillisecondsSuccess) {
+TEST(TimeMeasurement, PrintTimerResultInMillisecondsSuccess) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 
@@ -153,7 +163,8 @@ TEST(TimeMeasurement, PrintTimerResultInMillisecondsSuccess) {
 }
 
 /// @brief Test that the timer result is not printed if the times hasn't been stopped.
-TEST(TimeMeasurement, PrintTimerResultInMillisecondsFails) {
+TEST(TimeMeasurement, PrintTimerResultInMillisecondsFails) 
+{
 	xq::TimeMeasurement timer{};
 	EXPECT_EQ(timer.getTimerState(), xq::TimerStatus::NotStarted);
 

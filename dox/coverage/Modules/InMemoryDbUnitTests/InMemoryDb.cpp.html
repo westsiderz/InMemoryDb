@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>InMemoryDb.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+        <h4></h4>
+		<pre class="prettyprint lang-cpp linenums">
+/// @file InMemoryDb.cpp
+///
+/// @brief Implementation of the in-memory database class InMemoryDb.
+/// @details This class provides implementation of a database which is hosted
+/// directly in the memory. The implementation provides operation on this database
+/// like Find Matching Records and Delete Records.
+/// @author Ahmed Karaibrahimov
+/// @version 1.0
+/// @date 6/10/2021
+/// @copyright Copyright 2021 Ahmed Karaibrahimov. All rights reserved.
+/// @license No license required at all. Use it as you wish.
+
+#include "InMemoryDb.hpp"
+
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+
+namespace xq
+{
+	InMemoryDb::InMemoryDb(const DbTestRecordCollection&amp; f_records)
+		:
+<span style = "background-color:#dfd">		m_records{ f_records }
+	{
+	}</span>
+
+	void InMemoryDb::findMatchingRecordsOptimized(const std::string&amp; f_columnName,
+		const std::string&amp; f_matchString, DbTestRecordPointersCollection&amp; f_output) const
+<span style = "background-color:#dfd">	{</span>
+        // This will decrease the execution time by several milliseconds 
+        // but the used memory might be increased unnecessarely.
+<span style = "background-color:#dfd">        f_output.reserve(m_records.size());</span>
+        
+        // First check what column we are looking at before any processing of the records
+<span style = "background-color:#dfd">        if (f_columnName == "column0")</span>
+        {
+            // Get the numeric value from the string before the processing of the records 
+            // instead of getting it with each record's processing
+<span style = "background-color:#dfd">            uint32_t matchValue = std::stoul(f_matchString);</span>
+
+            // Traverse all records searching for a matching IDs
+<span style = "background-color:#dfd">            std::for_each(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+                if (matchValue == rec.id)</span>
+                {
+<span style = "background-color:#dfd">                    f_output.emplace_back(&amp;rec);</span>
+                }
+<span style = "background-color:#dfd">            });
+        }
+        else if (f_columnName == "column1")</span>
+        {
+            // Traverse all records searching for a matching Name
+<span style = "background-color:#dfd">            std::for_each(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+                if (rec.name.find(f_matchString) != std::string::npos)</span>
+                {
+<span style = "background-color:#dfd">                    f_output.emplace_back(&amp;rec);</span>
+                }
+<span style = "background-color:#dfd">            });
+        }
+        else if (f_columnName == "column2")</span>
+        {
+            // Get the numeric value from the string before the processing of the records 
+            // instead of getting it with each record's processing
+<span style = "background-color:#dfd">            int64_t matchValue = std::stol(f_matchString);</span>
+            // Traverse all records searching for a matching Balance
+<span style = "background-color:#dfd">            std::for_each(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+                if (matchValue == rec.balance)</span>
+                {
+<span style = "background-color:#dfd">                    f_output.emplace_back(&amp;rec);</span>
+                }
+<span style = "background-color:#dfd">            });
+        }
+        else if (f_columnName == "column3")</span>
+        {
+            // Traverse all records searching for a matching Address
+<span style = "background-color:#dfd">            std::for_each(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+                if (rec.address.find(f_matchString) != std::string::npos)</span>
+                {
+<span style = "background-color:#dfd">                    f_output.emplace_back(&amp;rec);</span>
+                }
+<span style = "background-color:#dfd">            });</span>
+        }
+<span style = "background-color:#dfd">	}</span>
+
+    void InMemoryDb::findMatchingRecords(const std::string&amp; f_columnName,
+        const std::string&amp; f_matchString, DbTestRecordPointersCollection&amp; f_output) const
+<span style = "background-color:#dfd">    {</span>
+        // This will decrease the execution time by several milliseconds 
+        // but the used memory might be increased unnecessarely.
+<span style = "background-color:#dfd">        f_output.reserve(m_records.size());</span>
+        
+<span style = "background-color:#dfd">        DbTableTestStringMatcher tableTestStringMatcher{ f_columnName, f_matchString };
+        std::for_each(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {</span>
+            // Check if the record is not deleted already
+<span style = "background-color:#dfd">            if (rec.id != 0)</span>
+            {
+                // Search for matching records
+<span style = "background-color:#dfd">                if (tableTestStringMatcher.checkMatching(rec))</span>
+                {
+<span style = "background-color:#dfd">                    f_output.emplace_back(&amp;rec);</span>
+                }
+            }
+<span style = "background-color:#dfd">        });
+    }</span>
+
+    void InMemoryDb::deleteRecordByID(uint32_t f_id)
+<span style = "background-color:#dfd">    {
+        DbTableTest emptyElement{};</span>
+        // Look for a record with the matching ID and once found, replace it with empty record. Stop any further processing of the records
+<span style = "background-color:#dfd">        auto foundRecordIter = std::find_if(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+            return rec.id == f_id; });
+        if (foundRecordIter != m_records.end())</span>
+        {
+            // Save the index of the deleted record for a later use
+<span style = "background-color:#dfd">            m_freeIndexes.push(foundRecordIter-&gt;id);</span>
+
+            // Replace the record that has to be deleted with an empty one
+<span style = "background-color:#dfd">            *foundRecordIter = emptyElement;</span>
+        }
+<span style = "background-color:#dfd">    }</span>
+
+    void InMemoryDb::deleteRecordByIDNonOptimized(uint32_t f_id)
+<span style = "background-color:#dfd">    {</span>
+        // Remove a record with a matching ID from the collection of records
+<span style = "background-color:#dfd">        auto removeIter = std::remove_if(m_records.begin(), m_records.end(), [&amp;](const DbTableTest&amp; rec) {
+            return rec.id == f_id;
+            });
+        if (removeIter != m_records.end())</span>
+        {
+<span style = "background-color:#dfd">            m_records.erase(removeIter);</span>
+        }
+<span style = "background-color:#dfd">    }</span>
+
+    void InMemoryDb::addRecord(const DbTableTest&amp; f_newRecord)
+<span style = "background-color:#dfd">    {</span>
+        // Check if we have available slot already
+<span style = "background-color:#dfd">        if (m_freeIndexes.size() &gt; 0)</span>
+        {
+<span style = "background-color:#dfd">            auto freeIndex = m_freeIndexes.front();
+            m_freeIndexes.pop();</span>
+            // Check just in case that we haven't gotten any wrong index out of bounds
+<span style = "background-color:#dfd">            if (freeIndex &lt; m_records.size())</span>
+            {
+                // Replace an existing free slot with the new record
+<span style = "background-color:#dfd">                m_records.at(freeIndex) = f_newRecord;
+            }</span>
+            // If the index was wrong, place the new record at the end of the collection
+            else
+            {
+<span style = "background-color:#fdd">                m_records.emplace_back(f_newRecord);</span>
+            }
+<span style = "background-color:#dfd">        }</span>
+        else
+        {
+            // No free slots available, push the record at the end
+<span style = "background-color:#dfd">            m_records.emplace_back(f_newRecord);</span>
+        }
+<span style = "background-color:#dfd">    }</span>
+
+    uint64_t InMemoryDb::getNumberOfDeletedRecords() const
+<span style = "background-color:#dfd">    {
+        return m_freeIndexes.size();
+    }</span>
+
+    uint64_t InMemoryDb::getNumberOfRecords() const
+<span style = "background-color:#dfd">    {
+        return m_records.size() - m_freeIndexes.size();
+    }</span>
+} /// namespace xq</pre>
+	</body>
+</html>

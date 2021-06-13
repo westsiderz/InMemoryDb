@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>DbTableTest.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+        <h4></h4>
+		<pre class="prettyprint lang-cpp linenums">
+/// @file DbTablesTest.cpp
+///
+/// @brief Implementation of the test table for the in-memory database.
+/// @details This struct will be used to describe a test table in the database
+/// used for performance tests. Also contains a class, which will take care to 
+/// match a given string with the content in a given column.
+/// @author Ahmed Karaibrahimov
+/// @version 1.0
+/// @date 6/12/2021
+/// @copyright Copyright 2021 Ahmed Karaibrahimov. All rights reserved.
+/// @license No license required at all. Use it as you wish
+
+#include "DbTableTest.hpp"
+
+namespace xq
+{
+    DbTableTestStringMatcher::DbTableTestStringMatcher(const std::string&amp; f_columnName, const std::string&amp; f_stringToMatch)
+<span style = "background-color:#dfd">    {</span>
+        // Select the value to be searched for and the function to execute the respective search
+<span style = "background-color:#dfd">        if (f_columnName == "column0")</span>
+        {
+<span style = "background-color:#dfd">            m_uint64tToMatch = std::stoul(f_stringToMatch);
+            m_functionToExecute = std::bind(&amp;DbTableTestStringMatcher::matchId, this, std::placeholders::_1);
+        }
+        else if (f_columnName == "column1")</span>
+        {
+<span style = "background-color:#dfd">            m_stringToMatch = f_stringToMatch;
+            m_functionToExecute = std::bind(&amp;DbTableTestStringMatcher::matchName, this, std::placeholders::_1);
+        }
+        else if (f_columnName == "column2")</span>
+        {
+<span style = "background-color:#dfd">            m_int32tToMatch = std::stoi(f_stringToMatch);
+            m_functionToExecute = std::bind(&amp;DbTableTestStringMatcher::matchBalance, this, std::placeholders::_1);
+        }</span>
+        else
+        {
+<span style = "background-color:#dfd">            m_stringToMatch = f_stringToMatch;
+            m_functionToExecute = std::bind(&amp;DbTableTestStringMatcher::matchAddress, this, std::placeholders::_1);</span>
+        }
+
+        // A workaround: The checkMatching() function is not inlined and instead gets removed by the compiler.
+        // Adding call to it here fixes this
+<span style = "background-color:#dfd">        DbTableTest dummy{};
+        checkMatching(dummy);
+    }</span>
+
+    bool DbTableTestStringMatcher::checkMatching(const DbTableTest&amp; f_record) const
+<span style = "background-color:#dfd">    {
+        return m_functionToExecute(f_record);
+    }</span>
+
+    bool DbTableTestStringMatcher::matchId(const DbTableTest&amp; f_record) const
+<span style = "background-color:#dfd">    {
+        return f_record.id == m_uint64tToMatch;
+    }</span>
+
+    bool DbTableTestStringMatcher::matchName(const DbTableTest&amp; f_record) const
+<span style = "background-color:#dfd">    {
+        return f_record.name.find(m_stringToMatch) != std::string::npos;
+    }</span>
+
+    bool DbTableTestStringMatcher::matchBalance(const DbTableTest&amp; f_record) const
+<span style = "background-color:#dfd">    {
+        return f_record.balance == m_int32tToMatch;
+    }</span>
+
+    bool DbTableTestStringMatcher::matchAddress(const DbTableTest&amp; f_record) const
+<span style = "background-color:#dfd">    {
+        return f_record.address.find(m_stringToMatch) != std::string::npos;
+    }</span>
+}</pre>
+	</body>
+</html>

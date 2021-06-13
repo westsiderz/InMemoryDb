@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>TimeMeasurement.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+        <h4></h4>
+		<pre class="prettyprint lang-cpp linenums">
+/// @file TimeMeasurement.cpp
+///
+/// @brief Implementation of the class performing time measurements.
+/// @details Provides methods which start and stop timer and return the measured time.
+/// @author Ahmed Karaibrahimov
+/// @version 1.0
+/// @date 6/11/2021
+/// @copyright Copyright 2021 Ahmed Karaibrahimov. All rights reserved.
+/// @license No license required at all. Use it as you wish.
+
+#include "TimeMeasurement.hpp"
+
+#include &lt;iostream&gt;
+
+namespace xq
+{
+	void TimeMeasurement::startTimer()
+<span style = "background-color:#dfd">	{</span>
+		// The timer can be started only if it hasn't been started already
+<span style = "background-color:#dfd">		if (m_timerStatus != TimerStatus::Started)</span>
+		{
+<span style = "background-color:#dfd">			m_startTime = std::chrono::steady_clock::now();
+			m_timerStatus = TimerStatus::Started;
+		}</span>
+		else
+		{
+<span style = "background-color:#dfd">			std::cout &lt;&lt; "The timer cannot be started\n";</span>
+		}
+<span style = "background-color:#dfd">	}</span>
+
+	void TimeMeasurement::stopTimer()
+<span style = "background-color:#dfd">	{</span>
+		// The timer can be stopped only if it has been Started already
+<span style = "background-color:#dfd">		if (m_timerStatus == TimerStatus::Started)</span>
+		{
+<span style = "background-color:#dfd">			m_endTime = std::chrono::steady_clock::now();
+			m_timerStatus = TimerStatus::Stopped;
+		}</span>
+		else
+		{
+<span style = "background-color:#dfd">			std::cout &lt;&lt; "The timer cannot be stopped\n";</span>
+		}
+<span style = "background-color:#dfd">	}</span>
+
+	void TimeMeasurement::resetTimer()
+<span style = "background-color:#dfd">	{
+		m_timerStatus = TimerStatus::NotStarted;
+	}</span>
+
+	void TimeMeasurement::printTimeInSeconds(const std::string&amp; f_operationName) const
+<span style = "background-color:#dfd">	{</span>
+		// Print the result only if the timer has been started and then stopped
+<span style = "background-color:#dfd">		if (m_timerStatus == TimerStatus::Stopped)</span>
+		{
+<span style = "background-color:#dfd">			std::chrono::duration&lt;double&gt; executionTimeInSeconds = m_endTime - m_startTime;
+			std::cout &lt;&lt; "The operation " &lt;&lt; f_operationName &lt;&lt; " was executed in " &lt;&lt; executionTimeInSeconds.count() &lt;&lt; " seconds\n";
+		}</span>
+		else
+		{
+<span style = "background-color:#dfd">			std::cout &lt;&lt; "The timer was not started and stopped properly\n";</span>
+		} 
+<span style = "background-color:#dfd">	}</span>
+
+	void TimeMeasurement::printTimeInMilliseconds(const std::string&amp; f_operationName) const
+<span style = "background-color:#dfd">	{</span>
+		// Print the result only if the timer has been started and then stopped
+<span style = "background-color:#dfd">		if (m_timerStatus == TimerStatus::Stopped)</span>
+		{
+<span style = "background-color:#dfd">			auto executionTimeInMilliseconds = std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(m_endTime - m_startTime).count();
+			std::cout &lt;&lt; "The operation " &lt;&lt; f_operationName &lt;&lt; " was executed in " &lt;&lt; executionTimeInMilliseconds &lt;&lt; " milliseconds\n";
+		}</span>
+		else
+		{
+<span style = "background-color:#dfd">			std::cout &lt;&lt; "The timer was not started and stopped properly\n";</span>
+		}
+<span style = "background-color:#dfd">	}</span>
+
+	TimerStatus TimeMeasurement::getTimerState() const
+<span style = "background-color:#dfd">	{
+		return m_timerStatus;
+	}</span>
+} /// namespace xq</pre>
+	</body>
+</html>
