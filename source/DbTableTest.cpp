@@ -37,11 +37,6 @@ namespace xq
             m_stringToMatch = f_stringToMatch;
             m_functionToExecute = std::bind(&DbTableTestStringMatcher::matchAddress, this, std::placeholders::_1);
         }
-
-        // A workaround: The checkMatching() function is not inlined and instead gets removed by the compiler.
-        // Adding call to it here fixes this
-        DbTableTest dummy{};
-        checkMatching(dummy);
     }
 
     bool DbTableTestStringMatcher::checkMatching(const DbTableTest& f_record) const

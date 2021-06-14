@@ -22,7 +22,7 @@ namespace xq
         m_records.reserve(f_numberOfRecords);
         for (uint64_t i = 1; i <= f_numberOfRecords; ++i)
         {
-            DbTableTest rec{ i, "testdata" + std::to_string(i), i, std::to_string(i) + "testdata" };
+            DbTableTest rec{ i, "testdata" + std::to_string(i), static_cast<int32_t>(i), std::to_string(i) + "testdata" };
             m_records.emplace_back(rec);
         }
 	}

@@ -22,6 +22,8 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE 	/std:c++17
 													/Wall
 													/WX
+													/wd4710
+													/wd4711
 													/wd4820
 													/wd5045)
 	

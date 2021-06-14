@@ -10,6 +10,7 @@
 #include "PerformanceTester.hpp"
 
 #include <iostream>
+#include <math.h>
 
 // Settings for the performance tests
 constexpr uint64_t const cNumberOfTestRecordsSameAmount{ 1000000 };

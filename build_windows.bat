@@ -11,7 +11,7 @@ REM Change this to the appropriate directory
 SET MSBUILD=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 IF NOT EXIST "%MSBUILD%" GOTO NOMSB
 
-"%MSBUILD%" InMemoryDb.sln /t:rebuild /p:Configuration=Debug /p:Platform="x64" /m
+"%MSBUILD%" InMemoryDb.sln /t:rebuild /p:Configuration=Release /p:Platform="x64" /m
 GOTO :EOF
 
 :NOMSB
