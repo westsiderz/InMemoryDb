@@ -7,7 +7,7 @@ There is a .bat (**build_windows.bat**) file which could be used to build the ap
 Here you need to specify the version of Visual Studio that you have and are planning to use. On my side I have Visual Studio 2019 so I am using: **Visual Studio 16 2019**. If you have a different version, change the line after the comment. <br/>
 Next thing you need to change is the second comment:<br/>
 *REM Change this to the appropriate directory* <br/>
-Here you should provide the path to the MSBuild.exe application. If you are using Visual Studio 2019 Community, chances are high that you might not have to change anything. If not, change with the appropriate path. <br/><br/>
+Here you should provide the path to the MSBuild.exe application. If you are using Visual Studio 2019 Community, chances are high that you might not have to change anything. If not, change with the appropriate path. Also here you can select whether to build for Debug or for Release. Change **/p:Configuration=** appropriately.<br/><br/>
 After the changes are done, run the .bat file. It will build the application first. Then it will build the unit tests. When building the unit tests, it will get the required version of GoogleTest.
 
 ## What does the application do?
